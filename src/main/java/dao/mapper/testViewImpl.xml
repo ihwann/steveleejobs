@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.tb_testlistViewDAO">
+    <select id="select_testmake_cate" resultType="dto.tb_testmake_cateDTO">
+        SELECT *
+        FROM tb_testmake_cate
+        LIMIT 1
+    </select>
+
+    <select id="select_testmake_title" resultType="dto.tb_testmake_titleDTO">
+        SELECT tb_testmake_title.test_no, tb_testmake_cate.test_cate_name, tb_testmake_title.test_title
+        FROM tb_testmake_cate
+                 LEFT OUTER JOIN tb_testmake_title ON tb_testmake_cate.test_cate = tb_testmake_title.test_cate
+        GROUP BY tb_testmake_title.test_no
+        LIMIT 10
+    </select>
+</mapper>
