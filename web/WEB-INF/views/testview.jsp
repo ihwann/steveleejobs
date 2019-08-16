@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%--
   Created by IntelliJ IDEA.
   User: 김일환
@@ -19,7 +20,6 @@
         .div-testview {
             background-color: gainsboro;
             height: 500px;
-
         }
 
         footer {
@@ -46,8 +46,15 @@
         }
 
         .test_list {
-            color: blue;
+            color: black;
         }
+
+        .test_list:hover {
+            color: blue;
+            text-decoration-line: underline;
+            cursor: pointer;
+        }
+
 
     </style>
 </head>
@@ -71,7 +78,7 @@
 </body>
 
 
-<script>
+<script type="text/javascript">
     $(document).ready(function () {
 
         $(".btn-testlistView").click(function () {
@@ -81,14 +88,29 @@
                 dataType: "JSON",
                 success: function (data) {
                     for (var i = 0; i < data.length; i++) {
-                        var title = data[i]["test_cate_name"] + " " + data[i]["test_title"];
-                        console.log(title);
-                        var $li = $('<li class="test_list">').append(title).append($('</li>'));
-                        //var $li = $('<li>title</li>');
-                        $('.div-testview-left > ul').append($li);
+                        var test_no = data[i]["test_no"];
+                        var test_content = data[i]["test_cate_name"] + " " + data[i]["test_title"];
+                        var createInput = document.createElement('input');
+                        createInput.setAttribute('type', 'hidden');
+                        createInput.setAttribute('class', 'input-test-no');
+                        createInput.setAttribute('value', test_no);
+                        var $test_list = $('<li class="test_list">').append(createInput).append(test_content).append($('</li>'));
+
+                        $('.div-testview-left > ul').append($test_list);
                     }
                 }
             });
+        });
+
+        $(document).on("click", ".test_list", function () {
+            var test_no = $(this).find('.input-test-no').val();
+            $.ajax({
+                url: "${pageContext.request.contextPath}/testContentView?find_test_no=" + test_no,
+                type: "POST",
+                success: function () {
+                    console.log(test_no);
+                }
+            })
         });
     });
 </script>
